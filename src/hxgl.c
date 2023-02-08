@@ -7,6 +7,39 @@ void hxglLoadExtension(void* loader)
     gladLoadGLLoader((GLADloadproc)loader);
 }
 
+#ifndef HXGL_BUILD_RELEASE
+    #include <stdio.h>
+    #define LOG_INFO(FMT, ...) printf("[INFO]: " FMT "\n", __VA_ARGS__)
+    #define LOG_WARN(FMT, ...) printf("[WARN]: " FMT "\n", __VA_ARGS__)
+    #define LOG_ERROR(FMT, ...) printf("[ERROR]: " FMT "\n", __VA_ARGS__)
+
+    void hxglCheckErrors()
+    {
+        int check = 1;
+        while (check)
+        {
+            const GLenum err = glGetError();
+            switch (err)
+            {
+                case GL_NO_ERROR: LOG_INFO("%s", "No OpenGL error detected"); check = 0; break;
+                case 0x0500: LOG_WARN("%s", "OpenGL Error detected: GL_INVALID_ENUM"); break;
+                case 0x0501: LOG_WARN("%s", "OpenGL Error detected: GL_INVALID_VALUE"); break;
+                case 0x0502: LOG_WARN("%s", "OpenGL Error detected: GL_INVALID_OPERATION"); break;
+                case 0x0503: LOG_WARN("%s", "OpenGL Error detected: GL_STACK_OVERFLOW"); break;
+                case 0x0504: LOG_WARN("%s", "OpenGL Error detected: GL_STACK_UNDERFLOW"); break;
+                case 0x0505: LOG_WARN("%s", "OpenGL Error detected: GL_OUT_OF_MEMORY"); break;
+                case 0x0506: LOG_WARN("%s", "OpenGL Error detected: GL_INVALID_FRAMEBUFFER_OPERATION"); break;
+                default: LOG_WARN("%s:%i", "OpenGL Error detected: Unknown error code:", err); break;
+            }
+        }
+    }
+#else
+    void hxglCheckErrors() { }
+    #define LOG_INFO(FMT, ...)
+    #define LOG_WARN(FMT, ...)
+    #define LOG_ERROR(FMT, ...)
+#endif
+
 void hxglClear()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -18,6 +51,21 @@ uint32_t hxglLoadVertexArray()
     uint32_t vao = 0;
     glGenVertexArrays(1, &vao);
     return vao;
+}
+
+void hxglDropVertexArray(uint32_t vao)
+{
+    glDeleteVertexArrays(1, &vao);
+}
+
+void hxglEnableVertexArray(uint32_t vao)
+{
+    glBindVertexArray(vao);
+}
+
+void hxglDisableVertexArray()
+{
+    glBindVertexArray(0);
 }
 
 void hxglSetVertexAttribute(unsigned int index, int compCount, int type, bool normalized, int stride, const void *pointer)
@@ -43,7 +91,7 @@ uint32_t hxglLoadVertexBuffer(const void* data, int size, bool dynamic)
     uint32_t vbo = 0;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, size, data, dynamic? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
     return vbo;
 }
 
@@ -75,7 +123,7 @@ uint32_t hxglLoadIndexBuffer(const void* data, int size, bool dynamic)
     uint32_t vbo = 0;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, dynamic? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
     return vbo;
 }
 
