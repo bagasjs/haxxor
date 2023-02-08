@@ -13,25 +13,25 @@ int main(void)
 	hxglEnableVertexArray(vao);
 
 	float vertices[] = {
-		0.5f, 0.5f,
-		-0.5f, 0.5f,
-		-0.5f, -0.5f,
+        -0.5f,  0.5f, 0.0f,
+         0.5f,  0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
 	};
 
 	uint32_t vbo = hxglLoadVertexBuffer(vertices, sizeof(vertices), false);
 	hxglEnableVertexBuffer(vbo);
-	hxglSetVertexAttribute(0, 2, HXGL_FLOAT, false, 2 * sizeof(float), (void*) 0);
+	hxglSetVertexAttribute(0, 3, HXGL_FLOAT, false, 3 * sizeof(float), (void*) 0);
 
-	uint32_t elements[] = { 0, 1, 2 };
+	uint32_t elements[] = { 0, 1, 2, 2, 3, 0 };
 	uint32_t ibo = hxglLoadIndexBuffer(elements, sizeof(elements), false);
 	hxglEnableIndexBuffer(ibo);
 
 	while(!ShouldClose())
 	{
 		PollEvents();
-		hxglDrawVertexArrayElements(0, 3, (void*)0);
+		hxglDrawVertexArrayElements(0, 6, 0);
 		Update();
-		hxglCheckErrors();
 	}
 
 	hxglDropIndexBuffer(ibo);

@@ -14,7 +14,7 @@ uint32_t hxglLoadVertexArray();
 void hxglDropVertexArray(uint32_t vao);
 void hxglEnableVertexArray(uint32_t vao);
 void hxglDisableVertexArray();
-void hxglSetVertexAttribute(unsigned int index, int compCount, int type, bool normalized, int stride, const void *pointer);
+void hxglSetVertexAttribute(unsigned int index, int compCount, int type, bool normalized, int vertexSize, const void *vertexAttrOffset);
 void hxglDrawVertexArray(int offset, int count);
 void hxglDrawVertexArrayElements(int offset, int count, const void* buffer);
 

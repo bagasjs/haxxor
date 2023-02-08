@@ -37,22 +37,18 @@
 
 const GLchar* defaultVertSource = 
     "#version 430 core\n"
-    "in vec2 position;\n"
-    "in vec3 color;\n"
-    "out vec3 Color;\n"
+    "layout( location=0 ) in vec3 a_Position;\n"
     "void main()\n"
     "{"
-        "Color = color;\n"
-        "gl_Position = vec4(position, 0.0, 1.0);\n"
+        "gl_Position = vec4(a_Position, 1.0);\n"
     "}";
 
 const GLchar* defaultFragSource =
     "#version 430 core\n"
-    "in vec3 Color;\n"
-    "out vec4 outColor;\n"
+    "layout(location = 0) out vec4 outColor;\n"
     "void main()\n"
     "{\n"
-        "outColor = vec4(Color, 1.0);\n"
+        "outColor = vec4(1.0f, 1.0f, 1.0f, 1.0);\n"
     "}\n";
 
 /** Other functionality */
@@ -216,7 +212,7 @@ uint32_t hxglLoadShader(const char* vertSource, const char* fragSource)
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
-    glDeleteProgram(shaderProgram);
+    glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
     glUseProgram(shaderProgram);
     return shaderProgram;
