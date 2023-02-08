@@ -4,11 +4,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+bool hxglInit();
 void hxglLoadExtension(void* loader);
+void hxglCheckErrors();
 void hxglClear();
+void hxglClearColor(float r, float g, float b, float a);
 
 uint32_t hxglLoadVertexArray();
-void hxglSetVertexAttribute(unsigned int index, int compCount, int type, bool normalized, int stride, const void *pointer);
+void hxglDropVertexArray(uint32_t vao);
+void hxglEnableVertexArray(uint32_t vao);
+void hxglDisableVertexArray();
+void hxglSetVertexAttribute(unsigned int index, int compCount, int type, bool normalized, int vertexSize, const void *vertexAttrOffset);
 void hxglDrawVertexArray(int offset, int count);
 void hxglDrawVertexArrayElements(int offset, int count, const void* buffer);
 
@@ -24,14 +30,20 @@ void hxglUpdateIndexBuffer(uint32_t ibo, const void* data, int dataSize, int off
 void hxglEnableIndexBuffer(uint32_t ibo);
 void hxglDisableIndexBuffer();
 
+uint32_t hxglLoadShader(const char* vertSource, const char* fragSource);
+void hxglDropShader(uint32_t shader);
+void hxglEnableShader(uint32_t shader);
+void hxglDisableShader();
+
+
 typedef enum HXGLAttrType {
-    GL_BYTE = 0x1400,
-    GL_UNSIGNED_BYTE = 0x1401,
-    GL_SHORT = 0x1402,
-    GL_UNSIGNED_SHORT = 0x1403,
-    GL_INT = 0x1404,
-    GL_UNSIGNED_INT = 0x1405,
-    GL_FLOAT = 0x1406
+    HXGL_BYTE = 0x1400,
+    HXGL_UNSIGNED_BYTE = 0x1401,
+    HXGL_SHORT = 0x1402,
+    HXGL_UNSIGNED_SHORT = 0x1403,
+    HXGL_INT = 0x1404,
+    HXGL_UNSIGNED_INT = 0x1405,
+    HXGL_FLOAT = 0x1406
 } HXGLAttrType;
 
 #endif 

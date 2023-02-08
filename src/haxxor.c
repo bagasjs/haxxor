@@ -20,6 +20,9 @@ bool InitHaxxor(const char* name, float width, float height)
 {
     if(APP.Initialized) return false; // Haxxor has been initialized
     if(!glfwInit()) return false; // Failed to initialize glfw
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     APP.Surface.Handle = glfwCreateWindow((int)width, (int)height, name, NULL, NULL);
     if(APP.Surface.Handle == NULL) return false; // Failed to create window
     glfwMakeContextCurrent(APP.Surface.Handle);

@@ -1,9 +1,6 @@
 #define EZMATH_WITH_UTILS
 #include "hxmath.h"
 
-#include <stdlib.h>
-#include <memory.h>
-
 #ifdef EZMATH_WITH_UTILS
     #include <stdio.h>
 
@@ -33,7 +30,33 @@
     }
 #endif // EZMATH_WITH_UTILS
 
-void Memset(void* dst, int val, uint32_t size)
+#include <math.h>
+float Sin(float x)
 {
-    memset(dst, val, (size_t)size);
+    return sin(x);
+}
+
+float Cos(float x)
+{
+    return cos(x);
+}
+
+float Tan(float x)
+{
+    return tan(x);
+}
+
+float Acos(float x)
+{
+    return acos(x);
+}
+
+float Sqrt(float x)
+{
+    return sqrt(x);
+}
+
+float Abs(float x)
+{
+    return fabsf(x);
 }
