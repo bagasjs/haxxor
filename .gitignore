@@ -1,0 +1,4 @@
+build/bin
+build/bin-int
+__pycache__
+.vscode
