@@ -4,9 +4,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+bool hxglInit();
 void hxglLoadExtension(void* loader);
 void hxglCheckErrors();
 void hxglClear();
+void hxglClearColor(float r, float g, float b, float a);
 
 uint32_t hxglLoadVertexArray();
 void hxglDropVertexArray(uint32_t vao);
@@ -27,6 +29,12 @@ void hxglDropIndexBuffer(uint32_t ibo);
 void hxglUpdateIndexBuffer(uint32_t ibo, const void* data, int dataSize, int offset);
 void hxglEnableIndexBuffer(uint32_t ibo);
 void hxglDisableIndexBuffer();
+
+uint32_t hxglLoadShader(const char* vertSource, const char* fragSource);
+void hxglDropShader(uint32_t shader);
+void hxglEnableShader(uint32_t shader);
+void hxglDisableShader();
+
 
 typedef enum HXGLAttrType {
     HXGL_BYTE = 0x1400,

@@ -1,26 +1,36 @@
 #ifndef __EZMATH__
 #define __EZMATH__
 
+#include <stdlib.h>
+#include <memory.h>
 #include <stdint.h>
 #include <stdbool.h>
 
-#define EZ_PI 3.14159265358979323846f
-#define EZ_PI_2 2.0f * EZ_PI
-#define EZ_HALF_PI 0.5f * EZ_PI
-#define EZ_QUARTER_PI 0.25f * EZ_PI
-#define EZ_ONE_OVER_PI 1.0f / EZ_PI
-#define EZ_ONE_OVER_TWO_PI 1.0f / EZ_PI_2
-#define EZ_SQRT_TWO 1.41421356237309504880f
-#define EZ_SQRT_THREE 1.73205080756887729352f
-#define EZ_SQRT_ONE_OVER_TWO 0.70710678118654752440f
-#define EZ_SQRT_ONE_OVER_THREE 0.57735026918962576450f
-#define EZ_DEG2RAD_MULTIPLIER EZ_PI / 180.0f
-#define EZ_RAD2DEG_MULTIPLIER 180.0f / EZ_PI
-#define EZ_SEC_TO_US_MULTIPLIER (1000.0f * 1000.0f)
-#define EZ_SEC_TO_MS_MULTIPLIER 1000.0f
-#define EZ_MS_TO_SEC_MULTIPLIER 0.001f
-#define EZ_INFINITY 1e30f
-#define EZ_FLOAT_EPSILON 1.192092896e-07f
+#ifndef MATH_PI
+	#define MATH_PI 3.14159265358979323846f
+#endif
+#ifndef MATH_PI_2
+	#define MATH_PI_2 2.0f * MATH_PI
+#endif
+#ifndef MATH_HALF_PI
+	#define MATH_HALF_PI 0.5f * MATH_PI
+#endif
+#ifndef MATH_QUARTER_PI
+	#define MATH_QUARTER_PI 0.25f * MATH_PI
+#endif
+#define MATH_ONE_OVER_PI 1.0f / MATH_PI
+#define MATH_ONE_OVER_TWO_PI 1.0f / MATH_PI_2
+#define MATH_SQRT_TWO 1.41421356237309504880f
+#define MATH_SQRT_THREE 1.73205080756887729352f
+#define MATH_SQRT_ONE_OVER_TWO 0.70710678118654752440f
+#define MATH_SQRT_ONE_OVER_THREE 0.57735026918962576450f
+#define MATH_DEG2RAD_MULTIPLIER MATH_PI / 180.0f
+#define MATH_RAD2DEG_MULTIPLIER 180.0f / MATH_PI
+#define MATH_SEC_TO_US_MULTIPLIER (1000.0f * 1000.0f)
+#define MATH_SEC_TO_MS_MULTIPLIER 1000.0f
+#define MATH_MS_TO_SEC_MULTIPLIER 0.001f
+#define MATH_INFINITY 1e30f
+#define MATH_FLOAT_EPSILON 1.192092896e-07f
 
 #if defined(_MSC_VER)
 	#define INLINE __forceinline
@@ -50,10 +60,8 @@ float Acos(float x);
 float Sqrt(float x);
 float Abs(float x);
 
-void Memset(void* dst, int val, uint32_t size);
-
-float Random();
-float RandomRange(float min, float max);
+// float Random();
+// float RandomRange(float min, float max);
 
 /****************************************************
  ****************************************************
@@ -165,7 +173,7 @@ INLINE bool Vec2Compare(Vec2 v0, Vec2 v1, float tolerance) {
 }
 
 INLINE bool Vec2CompareEps(Vec2 v0, Vec2 v1) {
-	return Vec2Compare(v0, v1, EZ_FLOAT_EPSILON);
+	return Vec2Compare(v0, v1, MATH_FLOAT_EPSILON);
 }
 
 INLINE float Vec2Distance(Vec2 v0, Vec2 v1) {
@@ -337,7 +345,7 @@ INLINE bool Vec3Compare(Vec3 v0, Vec3 v1, float tolerance) {
 }
 
 INLINE bool Vec3CompareEps(Vec3 v0, Vec3 v1) {
-	return Vec3Compare(v0, v1, EZ_FLOAT_EPSILON);
+	return Vec3Compare(v0, v1, MATH_FLOAT_EPSILON);
 }
 
 INLINE float Vec3Distance(Vec3 v0, Vec3 v1) {
@@ -472,13 +480,13 @@ typedef union Mat4 {
 
 INLINE Mat4 Mat4Zero() {
 	Mat4 res;
-	Memset(res.elements, 0, sizeof(float) * 16);
+	memset(res.elements, 0, sizeof(float) * 16);
 	return res;
 }
 
 INLINE Mat4 Mat4Identity() {
 	Mat4 res;
-	Memset(res.elements, 0, sizeof(float) * 16);
+	memset(res.elements, 0, sizeof(float) * 16);
 	res.elements[0] = 1.0f;
 	res.elements[5] = 1.0f;
 	res.elements[10] = 1.0f;

@@ -6,6 +6,9 @@ int main(void)
 {
 	if(!InitHaxxor("My Window", 640.0f, 480.0f)) return -1;
 
+	// hxglClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	if(!hxglInit()) return -1;
+
 	uint32_t vao = hxglLoadVertexArray();
 	hxglEnableVertexArray(vao);
 
@@ -28,7 +31,12 @@ int main(void)
 		PollEvents();
 		hxglDrawVertexArrayElements(0, 3, (void*)0);
 		Update();
+		hxglCheckErrors();
 	}
+
+	hxglDropIndexBuffer(ibo);
+	hxglDropVertexBuffer(vbo);
+	hxglDropVertexArray(vao);
 
 	ShutHaxxor();
 }

@@ -1,11 +1,6 @@
 #include "hxgl.h"
 #include <glad/glad.h>
-
-/** Other functionality */
-void hxglLoadExtension(void* loader)
-{
-    gladLoadGLLoader((GLADloadproc)loader);
-}
+#include <memory.h>
 
 #ifndef HXGL_BUILD_RELEASE
     #include <stdio.h>
@@ -39,6 +34,62 @@ void hxglLoadExtension(void* loader)
     #define LOG_WARN(FMT, ...)
     #define LOG_ERROR(FMT, ...)
 #endif
+
+const GLchar* defaultVertSource = 
+    "#version 430 core\n"
+    "in vec2 position;\n"
+    "in vec3 color;\n"
+    "out vec3 Color;\n"
+    "void main()\n"
+    "{"
+        "Color = color;\n"
+        "gl_Position = vec4(position, 0.0, 1.0);\n"
+    "}";
+
+const GLchar* defaultFragSource =
+    "#version 430 core\n"
+    "in vec3 Color;\n"
+    "out vec4 outColor;\n"
+    "void main()\n"
+    "{\n"
+        "outColor = vec4(Color, 1.0);\n"
+    "}\n";
+
+/** Other functionality */
+
+typedef struct HXGLCoreData {
+    bool Initialized;
+    uint32_t DefaultShader;
+} HXGLCoreData;
+
+static HXGLCoreData HXGL;
+
+bool hxglInit()
+{
+    if(HXGL.Initialized) return false; // HXGL Already initialized
+    memset(&HXGL, 0, sizeof(HXGLCoreData));
+    HXGL.DefaultShader = hxglLoadShader(defaultVertSource, defaultFragSource);
+    hxglEnableShader(HXGL.DefaultShader);
+    HXGL.Initialized = true;
+    return true;
+}
+
+void hxglTerminate()
+{
+    if(!HXGL.Initialized) return;
+    hxglDropShader(HXGL.DefaultShader);
+    HXGL.Initialized = false;
+}
+
+void hxglLoadExtension(void* loader)
+{
+    gladLoadGLLoader((GLADloadproc)loader);
+}
+
+void hxglClearColor(float r, float g, float b, float a)
+{
+    glClearColor(r, g, b, a);
+}
 
 void hxglClear()
 {
@@ -146,4 +197,45 @@ void hxglEnableIndexBuffer(uint32_t vbo)
 void hxglDisableIndexBuffer()
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+uint32_t hxglLoadShader(const char* vertSource, const char* fragSource)
+{
+    // Create and compile the vertex shader
+    uint32_t vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertSource, NULL);
+    glCompileShader(vertexShader);
+
+    // Create and compile the fragment shader
+    uint32_t fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragSource, NULL);
+    glCompileShader(fragmentShader);
+
+    // Link the vertex and fragment shader into a shader program
+    uint32_t shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    glDeleteProgram(shaderProgram);
+    glDeleteShader(fragmentShader);
+    glUseProgram(shaderProgram);
+    return shaderProgram;
+}
+
+void hxglDropShader(uint32_t shader)
+{
+    glDeleteProgram(shader);
+}
+
+void hxglEnableShader(uint32_t shader)
+{
+    glUseProgram(shader);
+}
+
+void hxglDisableShader()
+{
+    if(HXGL.Initialized)
+        glUseProgram(HXGL.DefaultShader);
+    else
+        glUseProgram(0);
 }
