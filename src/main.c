@@ -6,37 +6,19 @@ int main(void)
 {
 	if(!InitHaxxor("My Window", 640.0f, 480.0f)) return -1;
 
-	// hxglClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	if(!hxglInit()) return -1;
-
-	uint32_t vao = hxglLoadVertexArray();
-	hxglEnableVertexArray(vao);
-
-	float vertices[] = {
-        -0.5f,  0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-	};
-
-	uint32_t vbo = hxglLoadVertexBuffer(vertices, sizeof(vertices), false);
-	hxglEnableVertexBuffer(vbo);
-	hxglSetVertexAttribute(0, 3, HXGL_FLOAT, false, 3 * sizeof(float), (void*) 0);
-
-	uint32_t elements[] = { 0, 1, 2, 2, 3, 0 };
-	uint32_t ibo = hxglLoadIndexBuffer(elements, sizeof(elements), false);
-	hxglEnableIndexBuffer(ibo);
+	RECTANGLE player = { 0.0f, 0.0f, 0.5f, 0.5f };
+	RECTANGLE enemy = { 0.0f, 0.0f, -0.5f, -0.5f };
+	const COLOR RED = { 255, 0, 0, 255 };
+	const COLOR BLUE = { 0, 0, 255, 255 };
 
 	while(!ShouldClose())
 	{
 		PollEvents();
-		hxglDrawVertexArrayElements(0, 6, 0);
-		Update();
+		BeginDraw();
+		DrawRectangle(player, BLUE);
+		DrawRectangle(enemy, RED);
+		EndDraw();
 	}
-
-	hxglDropIndexBuffer(ibo);
-	hxglDropVertexBuffer(vbo);
-	hxglDropVertexArray(vao);
 
 	ShutHaxxor();
 }

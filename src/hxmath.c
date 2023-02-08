@@ -4,7 +4,7 @@
 #ifdef EZMATH_WITH_UTILS
     #include <stdio.h>
 
-    void PrintMat4(Mat4* mat)
+    void PrintMat4(MAT4* mat)
     {
         printf("[\n[%.4f,%.4f,%.4f,%.4f]\n[%.4f,%.4f,%.4f,%.4f]\n[%.4f,%.4f,%.4f,%.4f]\n[%.4f,%.4f,%.4f,%.4f]\n]",
             mat->elements[0], mat->elements[1], mat->elements[2], mat->elements[3],
@@ -14,17 +14,17 @@
         );
     }
 
-    void PrintVec4(Vec4* vec)
+    void PrintVec4(VEC4* vec)
     {
         printf("[%.4f,%.4f,%.4f,%.4f]", vec->x, vec->y, vec->z, vec->w);
     }
 
-    void PrintVec3(Vec3* vec)
+    void PrintVec3(VEC3* vec)
     {
         printf("[%.4f,%.4f,%.4f]", vec->x, vec->y, vec->z);
     }
 
-    void PrintVec2(Vec2* vec)
+    void PrintVec2(VEC2* vec)
     {
         printf("[%.4f,%.4f]", vec->x, vec->y);
     }

@@ -36,7 +36,7 @@
 	#define INLINE __forceinline
 	#define NO_INLINE __declspec(noinline)
 #elif defined(__clang__)
-	#define INLINE inline
+	#define INLINE static inline
 	#define NO_INLINE
 #elif defined(__GNUG__) || defined(__GNUC__)
 	#define INLINE inline
@@ -71,7 +71,7 @@ float Abs(float x);
  ****************************************************
  ****************************************************/
 
-typedef union Vec2 {
+typedef union VEC2 {
 	float elements[2];
 	struct {
 		union {
@@ -81,87 +81,87 @@ typedef union Vec2 {
 			float y, g, t, v;
 		};
 	};
-} Vec2;
+} VEC2;
 
-INLINE Vec2 Vec2Create(float x, float y) {
-	Vec2 res = {0};
+INLINE VEC2 Vec2Create(float x, float y) {
+	VEC2 res = {0};
 	res.x = x;
 	res.y = y;
 	return res;
 }
 
-INLINE Vec2 Vec2Zero() {
+INLINE VEC2 Vec2Zero() {
 	return Vec2Create(0.0f, 0.0f);
 }
 
-INLINE Vec2 Vec2One() {
+INLINE VEC2 Vec2One() {
 	return Vec2Create(1.0f, 1.0f);
 }
 
-INLINE Vec2 Vec2Up() {
+INLINE VEC2 Vec2Up() {
 	return Vec2Create(0.0f, 1.0f);
 }
 
-INLINE Vec2 Vec2Down() {
+INLINE VEC2 Vec2Down() {
 	return Vec2Create(0.0f, -1.0f);
 }
 
-INLINE Vec2 Vec2Left() {
+INLINE VEC2 Vec2Left() {
 	return Vec2Create(-1.0f, 0.0f);
 }
 
-INLINE Vec2 Vec2Right() {
+INLINE VEC2 Vec2Right() {
 	return Vec2Create(1.0f, 0.0f);
 }
 
-INLINE Vec2 Vec2Add(Vec2 v0, Vec2 v1) {
+INLINE VEC2 Vec2Add(VEC2 v0, VEC2 v1) {
 	return Vec2Create(
 		v0.x + v1.x,
 		v0.y + v1.y
 	);
 }
 
-INLINE Vec2 Vec2Sub(Vec2 v0, Vec2 v1) {
+INLINE VEC2 Vec2Sub(VEC2 v0, VEC2 v1) {
 	return Vec2Create(
 		v0.x - v1.x,
 		v0.y - v1.y
 	);
 }
 
-INLINE Vec2 Vec2Mul(Vec2 v0, Vec2 v1) {
+INLINE VEC2 Vec2Mul(VEC2 v0, VEC2 v1) {
 	return Vec2Create(
 		v0.x * v1.x,
 		v0.y * v1.y
 	);
 }
 
-INLINE Vec2 Vec2Div(Vec2 v0, Vec2 v1) {
+INLINE VEC2 Vec2Div(VEC2 v0, VEC2 v1) {
 	return Vec2Create(
 		v0.x / v1.x,
 		v0.y / v1.y
 	);
 }
 
-INLINE float Vec2LengthSq(Vec2 vec) {
+INLINE float Vec2LengthSq(VEC2 vec) {
 	return vec.x * vec.x + vec.y * vec.y;
 }
 
-INLINE float Vec2Length(Vec2 vec) {
+INLINE float Vec2Length(VEC2 vec) {
 	return Sqrt(Vec2LengthSq(vec));
 }
 
-INLINE void Vec2Normalize(Vec2* vec) {
+INLINE void Vec2Normalize(VEC2* vec) {
 	const float length = Vec2Length(*vec);
 	vec->x /= length;
 	vec->y /= length;
 }
 
-INLINE Vec2 Vec2Normalized(Vec2 vec) {
+INLINE VEC2 Vec2Normalized(VEC2 vec) {
 	Vec2Normalize(&vec);
 	return vec;
 }
 
-INLINE bool Vec2Compare(Vec2 v0, Vec2 v1, float tolerance) {
+INLINE bool Vec2Compare(VEC2 v0, VEC2 v1, float tolerance) {
 	if(Abs(v0.x - v1.x) > tolerance) {
 		return false;
 	}
@@ -172,12 +172,12 @@ INLINE bool Vec2Compare(Vec2 v0, Vec2 v1, float tolerance) {
 	return false;
 }
 
-INLINE bool Vec2CompareEps(Vec2 v0, Vec2 v1) {
+INLINE bool Vec2CompareEps(VEC2 v0, VEC2 v1) {
 	return Vec2Compare(v0, v1, MATH_FLOAT_EPSILON);
 }
 
-INLINE float Vec2Distance(Vec2 v0, Vec2 v1) {
-	Vec2 d = Vec2Create(v0.x - v1.x, v0.y - v1.y);
+INLINE float Vec2Distance(VEC2 v0, VEC2 v1) {
+	VEC2 d = Vec2Create(v0.x - v1.x, v0.y - v1.y);
 	return Vec2Length(d);
 }
 
@@ -189,7 +189,7 @@ INLINE float Vec2Distance(Vec2 v0, Vec2 v1) {
  ****************************************************
  ****************************************************/
 
-typedef union Vec3 {
+typedef union VEC3 {
 	float elements[3];
 	struct {
 		union {
@@ -202,117 +202,117 @@ typedef union Vec3 {
 			float z, b, p, w;
 		};
 	};
-} Vec3;
+} VEC3;
 
-INLINE Vec3 Vec3Create(float x, float y, float z) {
-	Vec3 res = {0};
+INLINE VEC3 Vec3Create(float x, float y, float z) {
+	VEC3 res = {0};
 	res.x = x;
 	res.y = y;
 	res.z = z;
 	return res;
 }
 
-INLINE Vec3 Vec3Zero() {
-	Vec3 res = Vec3Create( 0.0f, 0.0f, 0.0f );
+INLINE VEC3 Vec3Zero() {
+	VEC3 res = Vec3Create( 0.0f, 0.0f, 0.0f );
 	return res;
 }
 
-INLINE Vec3 Vec3One() {
-	Vec3 res = Vec3Create( 1.0f, 1.0f, 1.0f );
+INLINE VEC3 Vec3One() {
+	VEC3 res = Vec3Create( 1.0f, 1.0f, 1.0f );
 	return res;
 }
 
-INLINE Vec3 Vec3Up() {
-	Vec3 res = Vec3Create( 0.0f, 1.0f, 0.0f );
+INLINE VEC3 Vec3Up() {
+	VEC3 res = Vec3Create( 0.0f, 1.0f, 0.0f );
 	return res;
 }
 
-INLINE Vec3 Vec3Down() {
-	Vec3 res = Vec3Create( 0.0f, -1.0f, 0.0f );
+INLINE VEC3 Vec3Down() {
+	VEC3 res = Vec3Create( 0.0f, -1.0f, 0.0f );
 	return res;
 }
 
-INLINE Vec3 Vec3Left() {
-	Vec3 res = Vec3Create( -1.0f, 0.0f, 0.0f );
+INLINE VEC3 Vec3Left() {
+	VEC3 res = Vec3Create( -1.0f, 0.0f, 0.0f );
 	return res;
 }
 
-INLINE Vec3 Vec3Right() {
-	Vec3 res = Vec3Create( 1.0f, 0.0f, 0.0f );
+INLINE VEC3 Vec3Right() {
+	VEC3 res = Vec3Create( 1.0f, 0.0f, 0.0f );
 	return res;
 }
 
-INLINE Vec3 Vec3Forward() {
-	Vec3 res = Vec3Create( 0.0f, 0.0f, -1.0f );
+INLINE VEC3 Vec3Forward() {
+	VEC3 res = Vec3Create( 0.0f, 0.0f, -1.0f );
 	return res;
 }
 
-INLINE Vec3 Vec3Back() {
-	Vec3 res = Vec3Create( 0.0f, 0.0f, 1.0f );
+INLINE VEC3 Vec3Back() {
+	VEC3 res = Vec3Create( 0.0f, 0.0f, 1.0f );
 	return res;
 }
 
-INLINE Vec3 Vec3Add(Vec3 v0, Vec3 v1) {
-	Vec3 res = {0};
+INLINE VEC3 Vec3Add(VEC3 v0, VEC3 v1) {
+	VEC3 res = {0};
 	res.x = v0.x + v1.x;
 	res.y = v0.y + v1.y;
 	res.z = v0.z + v1.z;
 	return res;
 }
 
-INLINE Vec3 Vec3Sub(Vec3 v0, Vec3 v1) {
-	Vec3 res = {0};
+INLINE VEC3 Vec3Sub(VEC3 v0, VEC3 v1) {
+	VEC3 res = {0};
 	res.x = v0.x - v1.x;
 	res.y = v0.y - v1.y;
 	res.z = v0.z - v1.z;
 	return res;
 }
 
-INLINE Vec3 Vec3Mul(Vec3 v0, Vec3 v1) {
-	Vec3 res = {0};
+INLINE VEC3 Vec3Mul(VEC3 v0, VEC3 v1) {
+	VEC3 res = {0};
 	res.x = v0.x * v1.x;
 	res.y = v0.y * v1.y;
 	res.z = v0.z * v1.z;
 	return res;
 }
 
-INLINE Vec3 Vec3Div(Vec3 v0, Vec3 v1) {
-	Vec3 res = {0};
+INLINE VEC3 Vec3Div(VEC3 v0, VEC3 v1) {
+	VEC3 res = {0};
 	res.x = v0.x / v1.x;
 	res.y = v0.y / v1.y;
 	res.z = v0.z / v1.z;
 	return res;
 }
 
-INLINE Vec3 Vec3MulA(Vec3 v0, float a) {
-	Vec3 res = {0};
+INLINE VEC3 Vec3MulA(VEC3 v0, float a) {
+	VEC3 res = {0};
 	res.x = v0.x * a;
 	res.y = v0.y * a;
 	res.z = v0.z * a;
 	return res;
 }
 
-INLINE float Vec3LengthSq(Vec3 vec) {
+INLINE float Vec3LengthSq(VEC3 vec) {
 	return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z;
 }
 
-INLINE float Vec3Length(Vec3 vec) {
+INLINE float Vec3Length(VEC3 vec) {
 	return Sqrt(Vec3LengthSq(vec));
 }
 
-INLINE void Vec3Normalize(Vec3* vec) {
+INLINE void Vec3Normalize(VEC3* vec) {
 	const float length = Vec3Length(*vec);
 	vec->x /= length;
 	vec->y /= length;
 	vec->z /= length;
 }
 
-INLINE Vec3 Vec3Normalized(Vec3 vec) {
+INLINE VEC3 Vec3Normalized(VEC3 vec) {
 	Vec3Normalize(&vec);
 	return vec;
 }
 
-INLINE float Vec3Dot(Vec3 v0, Vec3 v1) {
+INLINE float Vec3Dot(VEC3 v0, VEC3 v1) {
 	float p = 0;
 	p += v0.x * v1.x;
 	p += v0.y * v1.y;
@@ -320,15 +320,15 @@ INLINE float Vec3Dot(Vec3 v0, Vec3 v1) {
 	return p;
 }
 
-INLINE Vec3 Vec3Cross(Vec3 v0, Vec3 v1) {
-	Vec3 res = {0};
+INLINE VEC3 Vec3Cross(VEC3 v0, VEC3 v1) {
+	VEC3 res = {0};
 	res.x = v0.y * v1.z - v0.z * v1.y;
 	res.y = v0.z * v1.x - v0.x * v1.z;
 	res.z = v0.x * v1.y - v0.y * v1.x;
 	return res;
 }
 
-INLINE bool Vec3Compare(Vec3 v0, Vec3 v1, float tolerance) {
+INLINE bool Vec3Compare(VEC3 v0, VEC3 v1, float tolerance) {
 	if(Abs(v0.x - v1.x) > tolerance) {
 		return false;
 	}
@@ -344,12 +344,12 @@ INLINE bool Vec3Compare(Vec3 v0, Vec3 v1, float tolerance) {
 	return true;
 }
 
-INLINE bool Vec3CompareEps(Vec3 v0, Vec3 v1) {
+INLINE bool Vec3CompareEps(VEC3 v0, VEC3 v1) {
 	return Vec3Compare(v0, v1, MATH_FLOAT_EPSILON);
 }
 
-INLINE float Vec3Distance(Vec3 v0, Vec3 v1) {
-	Vec3 d = Vec3Create(
+INLINE float Vec3Distance(VEC3 v0, VEC3 v1) {
+	VEC3 d = Vec3Create(
 		v0.x - v1.x,
 		v0.y - v1.y,
 		v0.z - v1.z
@@ -365,7 +365,7 @@ INLINE float Vec3Distance(Vec3 v0, Vec3 v1) {
  ****************************************************
  ****************************************************/
 
-typedef union Vec4 {
+typedef union VEC4 {
 	float elements[4];
 	struct {
 		union {
@@ -381,11 +381,11 @@ typedef union Vec4 {
 			float w, a, q;
 		};
 	};
-} Vec4;
+} VEC4;
 
-INLINE Vec4 Vec4Create(float x, float y, float z, float w) {
-	Vec4 res;
-#if defined(KUSE_SIMD)
+INLINE VEC4 Vec4Create(float x, float y, float z, float w) {
+	VEC4 res;
+#if defined(USE_SIMD)
 	res.elements = _mm_setr_ps(x, y, z, w);
 #else
 	res.x = x;
@@ -396,55 +396,55 @@ INLINE Vec4 Vec4Create(float x, float y, float z, float w) {
 	return res;
 }
 
-INLINE Vec4 Vec4Zero() {
+INLINE VEC4 Vec4Zero() {
 	return Vec4Create(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
-INLINE Vec4 Vec4One() {
+INLINE VEC4 Vec4One() {
 	return Vec4Create(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-INLINE Vec4 Vec4add(Vec4 v0, Vec4 v1) {
-	Vec4 res = Vec4Zero();
+INLINE VEC4 Vec4add(VEC4 v0, VEC4 v1) {
+	VEC4 res = Vec4Zero();
 	for(int i = 0; i < 4; i++) {
 		res.elements[i] = v0.elements[i] + v1.elements[i];
 	}
 	return res;
 }
 
-INLINE Vec4 Vec4Sub(Vec4 v0, Vec4 v1) {
-	Vec4 res = Vec4Zero();
+INLINE VEC4 Vec4Sub(VEC4 v0, VEC4 v1) {
+	VEC4 res = Vec4Zero();
 	for(int i = 0; i < 4; i++) {
 		res.elements[i] = v0.elements[i] - v1.elements[i];
 	}
 	return res;
 }
 
-INLINE Vec4 Vec4Mul(Vec4 v0, Vec4 v1) {
-	Vec4 res = Vec4Zero();
+INLINE VEC4 Vec4Mul(VEC4 v0, VEC4 v1) {
+	VEC4 res = Vec4Zero();
 	for(int i = 0; i < 4; i++) {
 		res.elements[i] = v0.elements[i] * v1.elements[i];
 	}
 	return res;
 }
 
-INLINE Vec4 Vec4Div(Vec4 v0, Vec4 v1) {
-	Vec4 res = Vec4Zero();
+INLINE VEC4 Vec4Div(VEC4 v0, VEC4 v1) {
+	VEC4 res = Vec4Zero();
 	for(int i = 0; i < 4; i++) {
 		res.elements[i] = v0.elements[i] / v1.elements[i];
 	}
 	return res;
 }
 
-INLINE float Vec4LengthSq(Vec4 vec) {
+INLINE float Vec4LengthSq(VEC4 vec) {
 	return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w;
 }
 
-INLINE float Vec4Length(Vec4 vec) {
+INLINE float Vec4Length(VEC4 vec) {
 	return Sqrt(Vec4LengthSq(vec));
 }
 
-INLINE void Vec4Normalize(Vec4* vec) {
+INLINE void Vec4Normalize(VEC4* vec) {
 	const float length = Vec4Length(*vec);
 	vec->x /= length;
 	vec->y /= length;
@@ -452,12 +452,12 @@ INLINE void Vec4Normalize(Vec4* vec) {
 	vec->w /= length;
 }
 
-INLINE Vec4 Vec4Normalized(Vec4 vec) {
+INLINE VEC4 Vec4Normalized(VEC4 vec) {
 	Vec4Normalize(&vec);
 	return vec;
 }
 
-INLINE float Vec4Dot(Vec4 v0, Vec4 v1) {
+INLINE float Vec4Dot(VEC4 v0, VEC4 v1) {
 	float p = 0;
 	p += v0.x * v1.x;
 	p += v0.y * v1.y;
@@ -473,19 +473,19 @@ INLINE float Vec4Dot(Vec4 v0, Vec4 v1) {
  *
  ****************************************************
  ****************************************************/
-typedef union Mat4 {
+typedef union MAT4 {
 	float elements[16];
-	Vec4 rows[4];
-} Mat4;
+	VEC4 rows[4];
+} MAT4;
 
-INLINE Mat4 Mat4Zero() {
-	Mat4 res;
+INLINE MAT4 Mat4Zero() {
+	MAT4 res;
 	memset(res.elements, 0, sizeof(float) * 16);
 	return res;
 }
 
-INLINE Mat4 Mat4Identity() {
-	Mat4 res;
+INLINE MAT4 Mat4Identity() {
+	MAT4 res;
 	memset(res.elements, 0, sizeof(float) * 16);
 	res.elements[0] = 1.0f;
 	res.elements[5] = 1.0f;
@@ -494,8 +494,8 @@ INLINE Mat4 Mat4Identity() {
 	return res;
 }
 
-INLINE Mat4 Mat4Multiply(Mat4 m0, Mat4 m1) {
-	Mat4 res = Mat4Identity();
+INLINE MAT4 Mat4Multiply(MAT4 m0, MAT4 m1) {
+	MAT4 res = Mat4Identity();
 	const float* m0_ptr = m0.elements;
 	const float* m1_ptr = m1.elements;
 	float* dst_ptr = res.elements;
@@ -514,8 +514,8 @@ INLINE Mat4 Mat4Multiply(Mat4 m0, Mat4 m1) {
 	return res;
 }
 
-INLINE Mat4 Mat4Orthographic(float left, float right, float bottom, float top, float near, float far) {
-	Mat4 res = Mat4Identity();
+INLINE MAT4 Mat4Orthographic(float left, float right, float bottom, float top, float near, float far) {
+	MAT4 res = Mat4Identity();
 	float lr = 1.0f / (left - right);
 	float bt = 1.0f / (bottom - top);
 	float nf = 1.0f / (near - far);
@@ -531,9 +531,9 @@ INLINE Mat4 Mat4Orthographic(float left, float right, float bottom, float top, f
 	return res;
 }
 
-INLINE Mat4 Mat4Perspective(float fov_radians, float aspect_ratio, float near, float far) {
+INLINE MAT4 Mat4Perspective(float fov_radians, float aspect_ratio, float near, float far) {
 	float half_tan_fov = Tan(fov_radians * 0.5f);
-	Mat4 res = Mat4Zero();
+	MAT4 res = Mat4Zero();
 	res.elements[0] = 1.0f / (aspect_ratio * half_tan_fov);
 	res.elements[5] = 1.0f / half_tan_fov;
 	res.elements[10] = -((far + near) / (far - near));
@@ -542,16 +542,16 @@ INLINE Mat4 Mat4Perspective(float fov_radians, float aspect_ratio, float near, f
 	return res;
 }
 
-INLINE Mat4 Mat4LookAt(Vec3 pos, Vec3 target, Vec3 up) {
-	Mat4 result;
-	Vec3 z_axis;
+INLINE MAT4 Mat4LookAt(VEC3 pos, VEC3 target, VEC3 up) {
+	MAT4 result;
+	VEC3 z_axis;
 	z_axis.x = target.x - pos.x;
 	z_axis.y = target.y - pos.y;
 	z_axis.z = target.z - pos.z;
 
 	z_axis = Vec3Normalized(z_axis);
-	Vec3 x_axis = Vec3Normalized(Vec3Cross(z_axis, up));
-	Vec3 y_axis = Vec3Cross(x_axis, z_axis);
+	VEC3 x_axis = Vec3Normalized(Vec3Cross(z_axis, up));
+	VEC3 y_axis = Vec3Cross(x_axis, z_axis);
 
 	result.elements[0] = x_axis.x;
 	result.elements[1] = y_axis.x;
@@ -573,7 +573,7 @@ INLINE Mat4 Mat4LookAt(Vec3 pos, Vec3 target, Vec3 up) {
 	return result;
 }
 
-INLINE Mat4 Mat4Inverse(Mat4 matrix) {
+INLINE MAT4 Mat4Inverse(MAT4 matrix) {
 	const float* m = matrix.elements;
 
 	float t0 = m[10] * m[15];
@@ -601,7 +601,7 @@ INLINE Mat4 Mat4Inverse(Mat4 matrix) {
 	float t22 = m[0] * m[5];
 	float t23 = m[4] * m[1];
 
-	Mat4 result;
+	MAT4 result;
 	float* o = result.elements;
 
 	o[0] = (t0 * m[5] + t3 * m[9] + t4 * m[13]) - (t1 * m[5] + t2 * m[9] + t5 * m[13]);
@@ -631,24 +631,24 @@ INLINE Mat4 Mat4Inverse(Mat4 matrix) {
 	return result;
 }
 
-INLINE Mat4 Mat4Translation(Vec3 position) {
-    Mat4 result = Mat4Identity();
+INLINE MAT4 Mat4Translation(VEC3 position) {
+    MAT4 result = Mat4Identity();
     result.elements[12] = position.x;
     result.elements[13] = position.y;
     result.elements[14] = position.z;
     return result;
 }
 
-INLINE Mat4 Mat4_scale(Vec3 scale) {
-    Mat4 result = Mat4Identity();
+INLINE MAT4 Mat4Scale(VEC3 scale) {
+    MAT4 result = Mat4Identity();
     result.elements[0] = scale.x;
     result.elements[5] = scale.y;
     result.elements[10] = scale.z;
     return result;
 }
 
-INLINE Mat4 Mat4Transposed(Mat4 matrix) {
-    Mat4 out_matrix = Mat4Identity();
+INLINE MAT4 Mat4Transposed(MAT4 matrix) {
+    MAT4 out_matrix = Mat4Identity();
     out_matrix.elements[0] = matrix.elements[0];
     out_matrix.elements[1] = matrix.elements[4];
     out_matrix.elements[2] = matrix.elements[8];
@@ -668,8 +668,8 @@ INLINE Mat4 Mat4Transposed(Mat4 matrix) {
     return out_matrix;
 }
 
-INLINE Mat4 Mat4EulerX(float angle_radians) {
-    Mat4 out_matrix = Mat4Identity();
+INLINE MAT4 Mat4EulerX(float angle_radians) {
+    MAT4 out_matrix = Mat4Identity();
     float c = Cos(angle_radians);
     float s = Sin(angle_radians);
 
@@ -680,8 +680,8 @@ INLINE Mat4 Mat4EulerX(float angle_radians) {
     return out_matrix;
 }
 
-INLINE Mat4 Mat4EulerY(float angle_radians) {
-    Mat4 out_matrix = Mat4Identity();
+INLINE MAT4 Mat4EulerY(float angle_radians) {
+    MAT4 out_matrix = Mat4Identity();
     float c = Cos(angle_radians);
     float s = Sin(angle_radians);
 
@@ -692,8 +692,8 @@ INLINE Mat4 Mat4EulerY(float angle_radians) {
     return out_matrix;
 }
 
-INLINE Mat4 Mat4EulerZ(float angle_radians) {
-    Mat4 out_matrix = Mat4Identity();
+INLINE MAT4 Mat4EulerZ(float angle_radians) {
+    MAT4 out_matrix = Mat4Identity();
 
     float c = Cos(angle_radians);
     float s = Sin(angle_radians);
@@ -705,17 +705,17 @@ INLINE Mat4 Mat4EulerZ(float angle_radians) {
     return out_matrix;
 }
 
-INLINE Mat4 Mat4EulerXYZ(float x_radians, float y_radians, float z_radians) {
-    Mat4 rx = Mat4EulerX(x_radians);
-    Mat4 ry = Mat4EulerY(y_radians);
-    Mat4 rz = Mat4EulerZ(z_radians);
-    Mat4 out_matrix = Mat4Multiply(rx, ry);
+INLINE MAT4 Mat4EulerXYZ(float x_radians, float y_radians, float z_radians) {
+    MAT4 rx = Mat4EulerX(x_radians);
+    MAT4 ry = Mat4EulerY(y_radians);
+    MAT4 rz = Mat4EulerZ(z_radians);
+    MAT4 out_matrix = Mat4Multiply(rx, ry);
     out_matrix = Mat4Multiply(out_matrix, rz);
     return out_matrix;
 }
 
-INLINE Vec3 Mat4Forward(Mat4 matrix) {
-    Vec3 forward;
+INLINE VEC3 Mat4Forward(MAT4 matrix) {
+    VEC3 forward;
     forward.x = -matrix.elements[2];
     forward.y = -matrix.elements[6];
     forward.z = -matrix.elements[10];
@@ -723,14 +723,8 @@ INLINE Vec3 Mat4Forward(Mat4 matrix) {
     return forward;
 }
 
-/**
- * @brief Returns a backward vector relative to the provided matrix.
- * 
- * @param matrix The matrix from which to base the vector.
- * @return A 3-component directional vector.
- */
-INLINE Vec3 Mat4Backward(Mat4 matrix) {
-    Vec3 backward;
+INLINE VEC3 Mat4Backward(MAT4 matrix) {
+    VEC3 backward;
     backward.x = matrix.elements[2];
     backward.y = matrix.elements[6];
     backward.z = matrix.elements[10];
@@ -738,14 +732,8 @@ INLINE Vec3 Mat4Backward(Mat4 matrix) {
     return backward;
 }
 
-/**
- * @brief Returns a upward vector relative to the provided matrix.
- * 
- * @param matrix The matrix from which to base the vector.
- * @return A 3-component directional vector.
- */
-INLINE Vec3 Mat4Up(Mat4 matrix) {
-    Vec3 up;
+INLINE VEC3 Mat4Up(MAT4 matrix) {
+    VEC3 up;
     up.x = matrix.elements[1];
     up.y = matrix.elements[5];
     up.z = matrix.elements[9];
@@ -753,14 +741,8 @@ INLINE Vec3 Mat4Up(Mat4 matrix) {
     return up;
 }
 
-/**
- * @brief Returns a downward vector relative to the provided matrix.
- * 
- * @param matrix The matrix from which to base the vector.
- * @return A 3-component directional vector.
- */
-INLINE Vec3 Mat4Down(Mat4 matrix) {
-    Vec3 down;
+INLINE VEC3 Mat4Down(MAT4 matrix) {
+    VEC3 down;
     down.x = -matrix.elements[1];
     down.y = -matrix.elements[5];
     down.z = -matrix.elements[9];
@@ -768,14 +750,8 @@ INLINE Vec3 Mat4Down(Mat4 matrix) {
     return down;
 }
 
-/**
- * @brief Returns a left vector relative to the provided matrix.
- * 
- * @param matrix The matrix from which to base the vector.
- * @return A 3-component directional vector.
- */
-INLINE Vec3 Mat4Left(Mat4 matrix) {
-    Vec3 left;
+INLINE VEC3 Mat4Left(MAT4 matrix) {
+    VEC3 left;
     left.x = -matrix.elements[0];
     left.y = -matrix.elements[4];
     left.z = -matrix.elements[8];
@@ -783,14 +759,8 @@ INLINE Vec3 Mat4Left(Mat4 matrix) {
     return left;
 }
 
-/**
- * @brief Returns a right vector relative to the provided matrix.
- * 
- * @param matrix The matrix from which to base the vector.
- * @return A 3-component directional vector.
- */
-INLINE Vec3 Mat4Right(Mat4 matrix) {
-    Vec3 right;
+INLINE VEC3 Mat4Right(MAT4 matrix) {
+    VEC3 right;
     right.x = matrix.elements[0];
     right.y = matrix.elements[4];
     right.z = matrix.elements[8];
@@ -806,6 +776,7 @@ INLINE Vec3 Mat4Right(Mat4 matrix) {
  ****************************************************
  ****************************************************/
 
+typedef VEC4 QUAT;
 
 /****************************************************
  ****************************************************
@@ -817,14 +788,11 @@ INLINE Vec3 Mat4Right(Mat4 matrix) {
 
 #ifdef EZMATH_WITH_UTILS
 
-void PrintMat4(Mat4* mat);
-void PrintVec4(Vec4* vec);
-void PrintVec3(Vec3* mat);
-void PrintVec2(Vec2* vec);
+void PrintMat4(MAT4* mat);
+void PrintVec4(VEC4* vec);
+void PrintVec3(VEC3* mat);
+void PrintVec2(VEC2* vec);
 
 #endif // EZMATH_WITH_UTILS
-
-
-typedef Vec4 Quat;
 
 #endif // __EZMATH__

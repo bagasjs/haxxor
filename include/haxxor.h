@@ -11,14 +11,18 @@ typedef struct RECTANGLE {
     float x, y, w, h;
 } RECTANGLE;
 
-typedef struct COLOUR {
+typedef struct COLOR {
     uint8_t r, g, b, a;
-} COLOUR;
+} COLOR;
 
 bool InitHaxxor(const char* name, float width, float height);
 bool ShouldClose();
-void Update();
 void PollEvents();
+void SwapBuffers();
 void ShutHaxxor();
+
+void BeginDraw();
+void EndDraw();
+void DrawRectangle(RECTANGLE r, COLOR c);
 
 #endif

@@ -16,7 +16,7 @@
             const GLenum err = glGetError();
             switch (err)
             {
-                case GL_NO_ERROR: LOG_INFO("%s", "No OpenGL error detected"); check = 0; break;
+                case GL_NO_ERROR: check = 0; break;
                 case 0x0500: LOG_WARN("%s", "OpenGL Error detected: GL_INVALID_ENUM"); break;
                 case 0x0501: LOG_WARN("%s", "OpenGL Error detected: GL_INVALID_VALUE"); break;
                 case 0x0502: LOG_WARN("%s", "OpenGL Error detected: GL_INVALID_OPERATION"); break;
@@ -37,18 +37,25 @@
 
 const GLchar* defaultVertSource = 
     "#version 430 core\n"
-    "layout( location=0 ) in vec3 a_Position;\n"
+    "layout(location = 0) in vec3 a_Position;\n"
+    "layout(location = 1) in vec4 a_Color;\n"
+    "layout(location = 2) in vec2 a_TexCoords;\n"
+    "layout(location = 3) in float a_TexId;\n"
+    "out vec4 v_Color;\n"
     "void main()\n"
     "{"
+        "v_Color = a_Color;\n"
         "gl_Position = vec4(a_Position, 1.0);\n"
+        // "gl_Position = a_Color;\n"
     "}";
 
 const GLchar* defaultFragSource =
     "#version 430 core\n"
     "layout(location = 0) out vec4 outColor;\n"
+    "in vec4 v_Color;\n"
     "void main()\n"
     "{\n"
-        "outColor = vec4(1.0f, 1.0f, 1.0f, 1.0);\n"
+        "outColor = v_Color;\n"
     "}\n";
 
 /** Other functionality */
@@ -206,7 +213,6 @@ uint32_t hxglLoadShader(const char* vertSource, const char* fragSource)
     uint32_t fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragSource, NULL);
     glCompileShader(fragmentShader);
-
     // Link the vertex and fragment shader into a shader program
     uint32_t shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
@@ -215,6 +221,7 @@ uint32_t hxglLoadShader(const char* vertSource, const char* fragSource)
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
     glUseProgram(shaderProgram);
+    hxglCheckErrors();
     return shaderProgram;
 }
 
