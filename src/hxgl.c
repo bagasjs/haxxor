@@ -84,7 +84,7 @@ void hxglTerminate()
     HXGL.Initialized = false;
 }
 
-void hxglLoadExtension(void* loader)
+void hxglUseExtension(void* loader)
 {
     gladLoadGLLoader((GLADloadproc)loader);
 }
@@ -241,4 +241,59 @@ void hxglDisableShader()
         glUseProgram(HXGL.DefaultShader);
     else
         glUseProgram(0);
+}
+
+int hxglGetUniformLocation(uint32_t shader, const char* name)
+{
+    int loc = -1;
+    loc = glGetUniformLocation(shader, name);
+    if(loc == -1) LOG_WARN("Failed to find uniform with name %s", name);
+    return loc;
+}
+
+void hxglSetUniform(int location, const void* value, int uniformKind, int count)
+{
+    switch(uniformKind)
+    {
+        case HXGL_SHADER_UNIFORM_FLOAT: glUniform1fv(location, count, (float*)value); break;
+        case HXGL_SHADER_UNIFORM_VEC2: glUniform2fv(location, count, (float*)value); break;
+        case HXGL_SHADER_UNIFORM_VEC3: glUniform3fv(location, count, (float*)value); break;
+        case HXGL_SHADER_UNIFORM_VEC4: glUniform4fv(location, count, (float*)value); break;
+        case HXGL_SHADER_UNIFORM_INT: glUniform1iv(location, count, (int*)value); break;
+        case HXGL_SHADER_UNIFORM_IVEC2: glUniform2iv(location, count, (int*)value); break;
+        case HXGL_SHADER_UNIFORM_IVEC3: glUniform3iv(location, count, (int*)value); break;
+        case HXGL_SHADER_UNIFORM_IVEC4: glUniform4iv(location, count, (int*)value); break;
+        case HXGL_SHADER_UNIFORM_SAMPLER2D: glUniform1iv(location, count, (int*)value); break;
+        default: LOG_WARN("Invalid shader uniform kind: %d", uniformKind);
+    }
+}
+
+void hxglSetUniformMat4(int location, const float* value)
+{
+    glUniformMatrix4fv(location, 1, false, value);
+}
+
+
+uint32_t hxglLoadTexture(const void* data, int width, int height, int filter)
+{
+    uint32_t tex = 0;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    return tex;
+}
+
+void hxglEnableTexture(uint32_t texture, int slot)
+{
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, texture);
+}
+
+void hxglDisableTexture()
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

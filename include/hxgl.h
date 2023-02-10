@@ -4,8 +4,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define HXGL_TEX_SLOT_CAPACITY 10
+
 bool hxglInit();
-void hxglLoadExtension(void* loader);
+void hxglUseExtension(void* loader);
 void hxglCheckErrors();
 void hxglClear();
 void hxglClearColor(float r, float g, float b, float a);
@@ -14,7 +16,7 @@ uint32_t hxglLoadVertexArray();
 void hxglDropVertexArray(uint32_t vao);
 void hxglEnableVertexArray(uint32_t vao);
 void hxglDisableVertexArray();
-void hxglSetVertexAttribute(unsigned int index, int compCount, int type, bool normalized, int vertexSize, const void *vertexAttrOffset);
+void hxglSetVertexAttribute(unsigned int index, int compCount, int attrKind, bool normalized, int vertexSize, const void *vertexAttrOffset);
 void hxglDrawVertexArray(int offset, int count);
 void hxglDrawVertexArrayElements(int offset, int count, const void* buffer);
 
@@ -34,9 +36,17 @@ uint32_t hxglLoadShader(const char* vertSource, const char* fragSource);
 void hxglDropShader(uint32_t shader);
 void hxglEnableShader(uint32_t shader);
 void hxglDisableShader();
+int hxglGetUniformLocation(uint32_t shader, const char* name);
+void hxglSetUniform(int location, const void* value, int uniformKind, int count);
+void hxglSetUniformMat4(int location, const float* value);
 
 
-typedef enum HXGLAttrType {
+uint32_t hxglLoadTexture(const void* data, int width, int height, int filter);
+void hxglEnableTexture(uint32_t texture, int slot);
+void hxglDisableTexture();
+
+
+typedef enum HXGLAttrKind {
     HXGL_BYTE = 0x1400,
     HXGL_UNSIGNED_BYTE = 0x1401,
     HXGL_SHORT = 0x1402,
@@ -44,6 +54,23 @@ typedef enum HXGLAttrType {
     HXGL_INT = 0x1404,
     HXGL_UNSIGNED_INT = 0x1405,
     HXGL_FLOAT = 0x1406
-} HXGLAttrType;
+} HXGLAttrKind;
+
+typedef enum HXGLShaderUniformKind {
+    HXGL_SHADER_UNIFORM_FLOAT = 0,
+    HXGL_SHADER_UNIFORM_VEC2,
+    HXGL_SHADER_UNIFORM_VEC3,
+    HXGL_SHADER_UNIFORM_VEC4,
+    HXGL_SHADER_UNIFORM_INT,
+    HXGL_SHADER_UNIFORM_IVEC2,
+    HXGL_SHADER_UNIFORM_IVEC3,
+    HXGL_SHADER_UNIFORM_IVEC4,
+    HXGL_SHADER_UNIFORM_SAMPLER2D
+} HXGLShaderUniformKind;
+
+typedef enum HXGLTextureFilter {
+    HXGL_LINEAR = 0x2600,
+    HXGL_NEAREST = 0x2601
+} HXGLTextureFilter;
 
 #endif 
