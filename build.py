@@ -42,21 +42,21 @@ class CProject(ABC):
 		CC: str,
 		CFLAGS: str,
 		KIND: str,
-		SOURCES: list[str] = [],
-		INCLUDES: list[str] = [],
-		DEFINES: list[str] = [],
-		LIBS: list[str] = [],
-		LINKS: list[str] = []
+		SOURCES: list[str] = None,
+		INCLUDES: list[str] = None,
+		DEFINES: list[str] = None,
+		LIBS: list[str] = None,
+		LINKS: list[str] = None
 		):
 		self.NAME = NAME
 		self.CC = CC
 		self.CFLAGS = CFLAGS
 		self.KIND = KIND
-		self.SOURCES = SOURCES
-		self.INCLUDES = INCLUDES
-		self.DEFINES = DEFINES
-		self.LIBS = LIBS
-		self.LINKS = LINKS
+		self.SOURCES = SOURCES if isinstance(SOURCES, list) else []
+		self.INCLUDES = INCLUDES if isinstance(INCLUDES, list) else []
+		self.DEFINES = DEFINES if isinstance(DEFINES, list) else []
+		self.LIBS = LIBS if isinstance(LIBS, list) else []
+		self.LINKS = LINKS if isinstance(LINKS, list) else []
 
 		self._objdir = Helper.path("build/bin-int")
 		self._targetdir = Helper.path("build/bin")
@@ -69,7 +69,7 @@ class CProject(ABC):
 			os.mkdir(self._dependencydir)
 
 	def get_objects(self):
-		return [ os.path.join( self._objdir, Helper.change_extension(os.path.basename(file), "o")) for file in self.SOURCES ]
+		return [ os.path.join( self._objdir, Helper.change_extension(f"{self.NAME}_{os.path.basename(file)}", "o")) for file in self.SOURCES ]
 
 	@abstractmethod	
 	def on_linux(self):
@@ -91,37 +91,37 @@ class CProject(ABC):
 			raise Exception("Platform not supported")
 
 
-		print("(*) Compilation Stage")
+		print(f"({self.NAME}) Compilation Stage")
 		objects = self.get_objects()
 		rflags = Helper.join_flag(self.DEFINES, "-D") + Helper.join_flag(self.INCLUDES, "-I")
 		for src, obj in dict(zip(self.SOURCES, objects)).items():
 			print(f"Compiling {src}")
 			os.system(f"{self.CC} {self.CFLAGS} -c {src} -o {obj} {rflags}")
 
-		print("(*) Linking Stage")
+		print(f"({self.NAME}) Linking Stage")
 		objects = Helper.join_flag(objects, '')
 		prompt = "echo \"Failed to link\""
 		if self.KIND == CProject.KIND_EXECUTABLE:
 			target = Helper.path(self._targetdir, f"{self.NAME}.{executable_extension}")
 			rflags = Helper.join_flag(self.LINKS, "-l") + Helper.join_flag(self.LIBS, "-L")
 			prompt = f"{self.CC} {objects} -o {target} {rflags}"
-		elif self.kind == CProject.KIND_STATICLIB:
+		elif self.KIND == CProject.KIND_STATICLIB:
 			target = Helper.path(self._targetdir, f"lib{self.NAME}.a")
 			prompt = f"ar rcs {target} {objects}"
 		else:
 			pass
 		os.system(prompt)
 		
-		print("(*) Done")
+		print(f"({self.NAME}) Done\n")
 
 if __name__ == "__main__":
-	class HaxxorProject(CProject):
+	class Haxxor(CProject):
 		def __init__(self):
 			super().__init__(
 				NAME = "haxxor",
 				CC = "clang",
 				CFLAGS = "-g -Wall -Werror",
-				KIND = CProject.KIND_EXECUTABLE
+				KIND = CProject.KIND_STATICLIB
 			)
 
 			self.SOURCES += [
@@ -130,7 +130,8 @@ if __name__ == "__main__":
 				Helper.path(self._dependencydir, "src/input.c"),
 				Helper.path(self._dependencydir, "src/monitor.c"),
 				Helper.path(self._dependencydir, "src/vulkan.c"),
-				Helper.path(self._dependencydir, "src/window.c")	
+				Helper.path(self._dependencydir, "src/window.c"),
+				Helper.path(self._dependencydir, "src/glad.c"),
 			] + Helper.rwildcard("./src", lambda path, file: file.endswith(".c"))
 
 			self.INCLUDES += [
@@ -156,7 +157,6 @@ if __name__ == "__main__":
 				Helper.path(self._dependencydir, "src/egl_context.c"),
 				Helper.path(self._dependencydir, "src/osmesa_context.c"),
 				Helper.path(self._dependencydir, "src/linux_joystick.c"),
-				Helper.path(self._dependencydir, "src/glad.c"),
 			]
 			self.DEFINES += ["_GLFW_X11"]
 			self.LINKS += [
@@ -180,6 +180,44 @@ if __name__ == "__main__":
 				"_GLFW_WIN32",
 				"_CRT_SECURE_NO_WARNINGS"
 			]
+	
+	class Example(CProject):
+		def __init__(self):
+			super().__init__(
+				NAME = "example",
+				CC = "clang",
+				CFLAGS = "-g -Wall -Werror",
+				KIND = CProject.KIND_EXECUTABLE
+			)
+			self.SOURCES += Helper.rwildcard("./example", lambda path, file: file.endswith(".c"))
 
-	project = HaxxorProject()
-	project.build()
+			self.INCLUDES += [
+				"include",
+				"example",
+			]
+
+			self.LIBS += [
+				self._targetdir,
+			]
+
+			self.LINKS += [
+				"haxxor"
+			]
+		
+		def on_linux(self):
+			self.LINKS += [
+				"X11",
+				"m" # math
+			]
+
+		def on_windows(self):
+			self.DEFINES += [
+				"_GLFW_WIN32",
+				"_CRT_SECURE_NO_WARNINGS"
+			]
+
+	haxxor_project = Haxxor()
+	example_project = Example()
+
+	haxxor_project.build()
+	example_project.build()
