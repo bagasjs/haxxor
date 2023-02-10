@@ -22,7 +22,7 @@ Haxxor is currently only available for windows and every linux system that based
 - 3D Support
 
 ### Docs
-```c:
+```cpp:
 bool InitHaxxor(const char* name, float width, float height)
 void ShutHaxxor()
 bool ShouldClose()
