@@ -23,20 +23,20 @@ Haxxor is currently only available for windows and every linux system that based
 
 ### Docs
 ```cpp:
-bool InitHaxxor(const char* name, float width, float height)
-void ShutHaxxor()
-bool ShouldClose()
-void PollEvents()
-void SwapBuffers() // already included in EndDraw()
+bool InitHaxxor(const char* name, float width, float height);
+void ShutHaxxor();
+bool ShouldClose();
+void PollEvents();
+void SwapBuffers(); // already included in EndDraw()
 
-void BeginDraw()
-void EndDraw()
-void DrawRectangle(RECTANGLE r, COLOR c)
-void DrawRectangleTex(RECTANGLE r, TEXTURE2D t)
+void BeginDraw();
+void EndDraw();
+void DrawRectangle(RECTANGLE r, COLOR c);
+void DrawRectangleTex(RECTANGLE r, TEXTURE2D t);
 
-IMAGE* LoadImage(const void* data, int width, int height)
-IMAGE* LoadImageFromFile(const char* path, bool flip)
-RECTANGLE GetImageShape(const IMAGE* img)
-void DestroyImage(IMAGE* image)
-TEXTURE2D LoadTextureFromImage(const IMAGE* image)
+IMAGE* LoadImage(const void* data, int width, int height);
+IMAGE* LoadImageFromFile(const char* path, bool flip);
+RECTANGLE GetImageShape(const IMAGE* img);
+void DestroyImage(IMAGE* image);
+TEXTURE2D LoadTextureFromImage(const IMAGE* image);
 ``` 
