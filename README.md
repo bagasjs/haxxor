@@ -21,22 +21,5 @@ Haxxor is currently only available for windows and every linux system that based
 - Camera
 - 3D Support
 
-### Docs
-```cpp:
-bool InitHaxxor(const char* name, float width, float height);
-void ShutHaxxor();
-bool ShouldClose();
-void PollEvents();
-void SwapBuffers(); // already included in EndDraw()
-
-void BeginDraw();
-void EndDraw();
-void DrawRectangle(RECTANGLE r, COLOR c);
-void DrawRectangleTex(RECTANGLE r, TEXTURE2D t);
-
-IMAGE* LoadImage(const void* data, int width, int height);
-IMAGE* LoadImageFromFile(const char* path, bool flip);
-RECTANGLE GetImageShape(const IMAGE* img);
-void DestroyImage(IMAGE* image);
-TEXTURE2D LoadTextureFromImage(const IMAGE* image);
-``` 
+### How to use
+You can look at the **example** directory in this repository. Beside that you should also read the **include/haxxor.h** file to understand the API
