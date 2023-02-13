@@ -1,9 +1,10 @@
-#include "haxxor.h"
+#define HXGL_MAKE_IMPLEMENTATION
 #include "hxgl.h"
+#include "haxxor.h"
 #include "hxmath.h"
-#include <GLFW/glfw3.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <GLFW/glfw3.h>
 
 /** Utilities */
 VEC4 ColorToVec4(COLOR col)

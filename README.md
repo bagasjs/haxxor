@@ -22,4 +22,4 @@ Haxxor is currently only available for windows and every linux system that based
 - 3D Support
 
 ### How to use
-You can look at the **example** directory in this repository. Beside that you should also read the **include/haxxor.h** file to understand the API
+You can look at the **example** directory in this repository. Beside that you should also read the **include/haxxor.h** file to understand the API.
