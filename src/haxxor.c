@@ -285,6 +285,6 @@ void DestroyImage(IMAGE* image)
 
 TEXTURE2D LoadTextureFromImage(const IMAGE* image)
 {
-    TEXTURE2D tex = hxglLoadTexture(image->Data, image->Width, image->Height, HXGL_LINEAR);
+    TEXTURE2D tex = hxglLoadTexture(image->Data, image->Width, image->Height, HXGL_LINEAR_MIPMAP_LINEAR);
     return tex;
 }

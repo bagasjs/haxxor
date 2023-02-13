@@ -70,7 +70,11 @@ typedef enum HXGLShaderUniformKind {
 
 typedef enum HXGLTextureFilter {
     HXGL_LINEAR = 0x2600,
-    HXGL_NEAREST = 0x2601
+    HXGL_NEAREST = 0x2601,
+    HXGL_NEAREST_MIPMAP_NEAREST = 0x2700,
+    HXGL_LINEAR_MIPMAP_NEAREST = 0x2701,
+    HXGL_NEAREST_MIPMAP_LINEAR = 0x2702,
+    HXGL_LINEAR_MIPMAP_LINEAR = 0x2703,
 } HXGLTextureFilter;
 
 #ifdef HXGL_MAKE_IMPLEMENTATION
@@ -149,6 +153,8 @@ typedef enum HXGLTextureFilter {
         memset(&HXGL, 0, sizeof(HXGLCoreData));
         HXGL.DefaultShader = hxglLoadShader(defaultVertSource, defaultFragSource);
         hxglEnableShader(HXGL.DefaultShader);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         HXGL.Initialized = true;
         return true;
     }
@@ -172,7 +178,7 @@ typedef enum HXGLTextureFilter {
 
     void hxglClear()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     /** Vertex Array */
@@ -356,10 +362,11 @@ typedef enum HXGLTextureFilter {
         glGenTextures(1, &tex);
         glBindTexture(GL_TEXTURE_2D, tex);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         return tex;
     }
 

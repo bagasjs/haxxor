@@ -169,7 +169,7 @@ INLINE bool Vec2Compare(VEC2 v0, VEC2 v1, float tolerance) {
 	if(Abs(v0.y - v1.y) > tolerance) {
 		return false;
 	}
-	return false;
+	return true;
 }
 
 INLINE bool Vec2CompareEps(VEC2 v0, VEC2 v1) {
@@ -385,14 +385,10 @@ typedef union VEC4 {
 
 INLINE VEC4 Vec4Create(float x, float y, float z, float w) {
 	VEC4 res;
-#if defined(USE_SIMD)
-	res.elements = _mm_setr_ps(x, y, z, w);
-#else
 	res.x = x;
 	res.y = y;
 	res.z = z;
 	res.w = w;
-#endif
 	return res;
 }
 
