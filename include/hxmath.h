@@ -53,15 +53,36 @@
  ****************************************************
  ****************************************************/
 
-float Sin(float x);
-float Cos(float x);
-float Tan(float x);
-float Acos(float x);
-float Sqrt(float x);
-float Abs(float x);
+#include <math.h>
+INLINE float Sin(float x)
+{
+    return sin(x);
+}
 
-// float Random();
-// float RandomRange(float min, float max);
+INLINE float Cos(float x)
+{
+    return cos(x);
+}
+
+INLINE float Tan(float x)
+{
+    return tan(x);
+}
+
+INLINE float Acos(float x)
+{
+    return acos(x);
+}
+
+INLINE float Sqrt(float x)
+{
+    return sqrt(x);
+}
+
+INLINE float Abs(float x)
+{
+    return Sqrt(x * x);
+}
 
 /****************************************************
  ****************************************************
@@ -784,10 +805,39 @@ typedef VEC4 QUAT;
 
 #ifdef EZMATH_WITH_UTILS
 
-void PrintMat4(MAT4* mat);
-void PrintVec4(VEC4* vec);
-void PrintVec3(VEC3* mat);
-void PrintVec2(VEC2* vec);
+#ifdef EZMATH_WITH_UTILS
+    #include <stdio.h>
+
+    INLINE void PrintMat4(MAT4* mat)
+    {
+        printf("[\n[%.4f,%.4f,%.4f,%.4f]\n[%.4f,%.4f,%.4f,%.4f]\n[%.4f,%.4f,%.4f,%.4f]\n[%.4f,%.4f,%.4f,%.4f]\n]",
+            mat->elements[0], mat->elements[1], mat->elements[2], mat->elements[3],
+            mat->elements[4], mat->elements[5], mat->elements[6], mat->elements[7],
+            mat->elements[8], mat->elements[9], mat->elements[10], mat->elements[11],
+            mat->elements[12], mat->elements[13], mat->elements[14], mat->elements[15]
+        );
+    }
+
+    INLINE void PrintVec4(VEC4* vec)
+    {
+        printf("[%.4f,%.4f,%.4f,%.4f]", vec->x, vec->y, vec->z, vec->w);
+    }
+
+    INLINE void PrintVec3(VEC3* vec)
+    {
+        printf("[%.4f,%.4f,%.4f]", vec->x, vec->y, vec->z);
+    }
+
+    INLINE void PrintVec2(VEC2* vec)
+    {
+        printf("[%.4f,%.4f]", vec->x, vec->y);
+    }
+#else
+	INLINE void PrintMat4(MAT4* mat) { }
+	INLINE void PrintVec4(VEC4* vec) { }
+	INLINE void PrintVec3(VEC3* mat) { }
+	INLINE void PrintVec2(VEC2* vec) { }
+#endif // EZMATH_WITH_UTILS
 
 #endif // EZMATH_WITH_UTILS
 

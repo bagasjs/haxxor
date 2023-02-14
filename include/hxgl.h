@@ -1,3 +1,9 @@
+/***
+ * "hxgl.h" is another abstraction layer of OpenGL. It's depends on "glad" as its OpenGL loader.
+ * The need for another abstraction layer above OpenGL is because It won't work the same in one device and another device
+ * 
+ */
+
 #ifndef __HXGL_H__
 #define __HXGL_H__
 
@@ -40,7 +46,6 @@ int hxglGetUniformLocation(uint32_t shader, const char* name);
 void hxglSetUniform(int location, const void* value, int uniformKind, int count);
 void hxglSetUniformMat4(int location, const float* value);
 
-
 uint32_t hxglLoadTexture(const void* data, int width, int height, int filter);
 void hxglEnableTexture(uint32_t texture, int slot);
 void hxglDisableTexture();
@@ -78,7 +83,6 @@ typedef enum HXGLTextureFilter {
 } HXGLTextureFilter;
 
 #ifdef HXGL_MAKE_IMPLEMENTATION
-    #include "hxgl.h"
     #include <glad/glad.h>
     #include <memory.h>
 
@@ -138,19 +142,17 @@ typedef enum HXGLTextureFilter {
             "outColor = v_Color;\n"
         "}\n";
 
-    /** Other functionality */
-
-    typedef struct HXGLCoreData {
+    typedef struct HXGLContext {
         bool Initialized;
         uint32_t DefaultShader;
-    } HXGLCoreData;
+    } HXGLContext;
 
-    static HXGLCoreData HXGL;
+    static HXGLContext HXGL;
 
     bool hxglInit()
     {
         if(HXGL.Initialized) return false; // HXGL Already initialized
-        memset(&HXGL, 0, sizeof(HXGLCoreData));
+        memset(&HXGL, 0, sizeof(HXGLContext));
         HXGL.DefaultShader = hxglLoadShader(defaultVertSource, defaultFragSource);
         hxglEnableShader(HXGL.DefaultShader);
         glEnable(GL_BLEND);
